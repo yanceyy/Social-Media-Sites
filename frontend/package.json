@@ -8,6 +8,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "axios": "^0.21.1",
     "craco-less": "^1.18.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -46,5 +47,6 @@
     "lint-staged": "^11.1.2",
     "prettier": "2.3.2",
     "prop-types": "^15.7.2"
-  }
+  },
+  "proxy": "http://localhost:8800"
 }

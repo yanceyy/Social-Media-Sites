@@ -1,14 +1,15 @@
 import React from "react";
 import { Search, Person, Chat, Notifications } from "@material-ui/icons";
 import "./index.less";
+import LinkW from "../link";
 
 function Topbar() {
     return (
         <div className="topbarContainer">
             <div className="topbarLeft">
-                <span className="logo" onClick={() => location.assign("/")}>
-                    SOICALWHAT
-                </span>
+                <LinkW to="/">
+                    <span className="logo">SOICALWHAT</span>
+                </LinkW>
             </div>
             <div className="topbarCenter">
                 <div className="searchbar">
@@ -23,7 +24,9 @@ function Topbar() {
 
             <div className="topbarRight">
                 <div className="topbarLinks">
-                    <span className="topbarLink">Homepage</span>
+                    <LinkW to="/">
+                        <span className="topbarLink">Homepage</span>
+                    </LinkW>
                     <span className="topbarLink">Timeline</span>
                 </div>
                 <div className="topbarIcons">
@@ -40,12 +43,13 @@ function Topbar() {
                         <span className="topbarIconBadge">1</span>
                     </span>
                 </div>
-                <img
-                    src="/utils/dinasour.png"
-                    alt=""
-                    className="topbarImg"
-                    onClick={() => location.assign("/profile")}
-                />
+                <LinkW to="/profile">
+                    <img
+                        src="/utils/dinasour.png"
+                        alt=""
+                        className="topbarImg"
+                    />
+                </LinkW>
             </div>
         </div>
     );

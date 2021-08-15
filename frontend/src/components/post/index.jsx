@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import "./index.less";
 import { PropTypes } from "prop-types";
 import { MoreVert, Favorite, ThumbUp } from "@material-ui/icons";
+//import { getUser } from "../../api/action";
 function Post({ post }) {
-    const { desc, photo, comment } = post;
-    const [like, setLike] = useState(post.like);
+    const { description, photo, comment } = post;
+    const [like, setLike] = useState(post.likes ? post.likes.length : 0);
     const [hasLiked, sethasLiked] = useState(false);
     const likeIt = () => {
         if (!hasLiked) {
@@ -15,6 +16,7 @@ function Post({ post }) {
             sethasLiked(false);
         }
     };
+
     return (
         <div className="post">
             <div className="postWrapper">
@@ -33,7 +35,9 @@ function Post({ post }) {
                     </div>
                 </div>
                 <div className="postCenter">
-                    {desc ? <span className="postText">{desc}</span> : null}
+                    {description ? (
+                        <span className="postText">{description}</span>
+                    ) : null}
                     {photo ? (
                         <img
                             loading="lazy"
