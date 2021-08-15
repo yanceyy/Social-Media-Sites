@@ -11,8 +11,10 @@ function HomePage() {
             <Topbar />
             <div className="homeContainer">
                 <Sidebar />
-                <Feed />
-                <Rightbar />
+                <div className="rightPlanel">
+                    <Feed />
+                    <Rightbar />
+                </div>
             </div>
         </>
     );
