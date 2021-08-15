@@ -1,0 +1,82 @@
+.login {
+    width: 100vw;
+    height: 100vh;
+    background-color: #f0f2f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .loginWrapper {
+        width: 70%;
+        height: 70%;
+        //background-color: yellow;
+        display: flex;
+
+        .loginLeft,
+        .loginRight {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            .loginLogo {
+                font-size: 50px;
+                font-weight: 800;
+                color: #1775ee;
+            }
+
+            .loginDesc {
+                font-size: 24px;
+            }
+
+            .loginBox {
+                height: 300px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                border-radius: 10px;
+                justify-content: space-around;
+                align-items: stretch;
+                padding: 20px;
+                background-color: white;
+                color: #555;
+
+
+                #LoginUsername,
+                #LoginPassword {
+                    height: 50px;
+                    border-radius: 10px;
+                    border: 1px solid grey;
+                    font-size: 18px;
+                    padding: 10px;
+
+                    &:focus {
+                        outline: none
+                    }
+                }
+
+                .LoginButton,
+                .loginRegisterButton {
+                    height: 50px;
+                    color: white;
+                    border: none;
+                    border-radius: 10px;
+                    background-color: #1775ee;
+                    cursor: pointer;
+                    font-size: 20px;
+                    font-weight: 500;
+                }
+
+                .loginForget {
+                    text-align: center;
+                    color: #1775ee;
+                }
+
+                .loginRegisterButton {
+                    background-color: #42b72a;
+                }
+
+            }
+        }
+    }
+}
