@@ -15,7 +15,20 @@ Post get all posts
 */
 export const getFeeds = (userId) => ajax(BASEURL + "/post/timeline/" + userId, {})
 
+/*
+Post get all posts from user list
+*/
+export const getFeedsFromUserList = (userIdArray) => {
+    const promiseArray = userIdArray.map(userId => getFeeds(userId));
+    return Promise.all(promiseArray)
+}
 
+/* like or dislike post */
+export const likePost = (userId, postId) => ajax(BASEURL + "/post/like/" + postId, {
+    body: {
+        userId
+    }
+}, "PUT")
 /*
 Get user
 */

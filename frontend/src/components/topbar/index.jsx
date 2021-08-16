@@ -2,8 +2,8 @@ import React from "react";
 import { Search, Person, Chat, Notifications } from "@material-ui/icons";
 import "./index.less";
 import LinkW from "../link";
-
-function Topbar() {
+import { connect } from "react-redux";
+function Topbar({ userInfo }) {
     return (
         <div className="topbarContainer">
             <div className="topbarLeft">
@@ -45,7 +45,7 @@ function Topbar() {
                 </div>
                 <LinkW to="/profile">
                     <img
-                        src="/utils/dinasour.png"
+                        src={userInfo.avatar || "/utils/dinasour.png"}
                         alt=""
                         className="topbarImg"
                     />
@@ -55,4 +55,4 @@ function Topbar() {
     );
 }
 
-export default Topbar;
+export default connect((state) => ({ userInfo: state.userInfo }))(Topbar);

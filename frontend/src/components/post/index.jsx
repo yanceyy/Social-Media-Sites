@@ -2,13 +2,19 @@ import React, { useState } from "react";
 import "./index.less";
 import { PropTypes } from "prop-types";
 import { MoreVert, Favorite, ThumbUp } from "@material-ui/icons";
+import { postTime } from "../../utils/commonfunctions";
+import { likePost } from "../../api/action";
 //import { getUser } from "../../api/action";
-function Post({ post, userInfo }) {
+
+function Post({ post, userInfo, id }) {
     const { username, avatar } = userInfo;
-    const { description, photo, comment } = post;
+    const { description, comment, image, _id, createdAt } = post;
     const [like, setLike] = useState(post.likes ? post.likes.length : 0);
-    const [hasLiked, sethasLiked] = useState(false);
-    const likeIt = () => {
+    console.log(post.likes, id);
+    const [hasLiked, sethasLiked] = useState(
+        post.likes ? (post.likes.indexOf(id) !== -1 ? true : false) : false
+    );
+    const likeIt = async () => {
         if (!hasLiked) {
             setLike(like + 1);
             sethasLiked(true);
@@ -16,6 +22,7 @@ function Post({ post, userInfo }) {
             setLike(like - 1);
             sethasLiked(false);
         }
+        await likePost(id, _id);
     };
 
     return (
@@ -29,7 +36,7 @@ function Post({ post, userInfo }) {
                             className="postTopLeftImg"
                         />
                         <span className="postUsername">{username}</span>
-                        <span className="postTime">posted 5 mins ago</span>
+                        <span className="postTime">{postTime(createdAt)}</span>
                     </div>
                     <div className="postTopRight">
                         <MoreVert />
@@ -39,10 +46,10 @@ function Post({ post, userInfo }) {
                     {description ? (
                         <span className="postText">{description}</span>
                     ) : null}
-                    {photo ? (
+                    {image ? (
                         <img
                             loading="lazy"
-                            src={photo}
+                            src={image}
                             alt=""
                             className="postImg"
                         />

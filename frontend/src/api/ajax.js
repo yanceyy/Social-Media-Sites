@@ -9,7 +9,8 @@ export default function ajax(url, data = {}, type = "GET") {
         if (type == "GET") {
             request = axios.get(url, {params, timeout: MAXIMUM_TIMEOUT});
         } else {
-            request = axios.post(url, {
+            request = axios(url, {
+                method: type,
                 params,
                 data: body,
                 timeout: MAXIMUM_TIMEOUT
