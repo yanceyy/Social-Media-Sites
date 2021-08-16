@@ -24,3 +24,12 @@ export const getUser = (userId) => ajax(BASEURL + "/user", {
         id: userId
     }
 })
+
+
+/*
+Get User name from userId
+ */
+export const getUsernname = (userIdArray) => {
+    const promiseArray = userIdArray.map(userId => getUser(userId))
+    return Promise.all(promiseArray)
+}

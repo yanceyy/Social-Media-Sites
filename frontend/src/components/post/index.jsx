@@ -3,7 +3,8 @@ import "./index.less";
 import { PropTypes } from "prop-types";
 import { MoreVert, Favorite, ThumbUp } from "@material-ui/icons";
 //import { getUser } from "../../api/action";
-function Post({ post }) {
+function Post({ post, userInfo }) {
+    const { username, avatar } = userInfo;
     const { description, photo, comment } = post;
     const [like, setLike] = useState(post.likes ? post.likes.length : 0);
     const [hasLiked, sethasLiked] = useState(false);
@@ -23,11 +24,11 @@ function Post({ post }) {
                 <div className="postTop">
                     <div className="postTopLeft">
                         <img
-                            src="/utils/dinasour.png"
+                            src={avatar || "/utils/dinasour.png"}
                             alt=""
                             className="postTopLeftImg"
                         />
-                        <span className="postUsername">what</span>
+                        <span className="postUsername">{username}</span>
                         <span className="postTime">posted 5 mins ago</span>
                     </div>
                     <div className="postTopRight">
