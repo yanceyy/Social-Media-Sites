@@ -1,18 +1,37 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Topbar from "../../components/topbar";
 import Sidebar from "../../components/sidebar";
 import Rightbar from "../../components/rightbar";
 import Feed from "../../components/feed";
+import { getFeedsFromUserList, getUsernname } from "../../api/action";
 import "./index.less";
+import { connect } from "react-redux";
 
-function HomePage() {
+function HomePage({ userInfo }) {
+    const [posts, setPosts] = useState([]);
+    const [userNameLists, setUsernameLists] = useState([]);
+    const followings = userInfo.followings;
+    useEffect(async () => {
+        try {
+            const Usernames = await getUsernname(followings);
+            setUsernameLists(Usernames);
+            const Feeds = await getFeedsFromUserList(followings);
+            const AllFeeds = [];
+            Feeds.forEach((feed) => {
+                AllFeeds.push(...feed);
+            });
+            setPosts(AllFeeds);
+        } catch (err) {
+            console.log("wrong happend", err);
+        }
+    }, []);
     return (
         <>
             <Topbar />
             <div className="homeContainer">
                 <Sidebar />
                 <div className="rightPlanel">
-                    <Feed />
+                    <Feed userNameLists={userNameLists} posts={posts} />
                     <Rightbar />
                 </div>
             </div>
@@ -20,4 +39,4 @@ function HomePage() {
     );
 }
 
-export default HomePage;
+export default connect((state) => ({ userInfo: state.userInfo }))(HomePage);

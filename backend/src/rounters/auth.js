@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const User = require('../models/User')
 const bcrypt = require('bcrypt')
+const RESPONSESTATUS = require('../utils/responseStatus');
 
 // register
 router.post("/register", async (req, res) => {
@@ -10,10 +11,9 @@ router.post("/register", async (req, res) => {
         const hassedPassword = await bcrypt.hash(password, salt)
         const user = new User({username, email, password: hassedPassword});
         const userRes = await user.save();
-        res.status(200).json(userRes);
+        res.status(RESPONSESTATUS.Success).json(userRes);
     } catch (err) {
-        console.log(err);
-        res.status(400).send(err);
+        res.status(RESPONSESTATUS.BadRequest).send(err);
     }
 })
 
@@ -23,17 +23,17 @@ router.post("/login", async (req, res) => {
         const {email, password} = req.body;
         const user = await User.findOne({email});
         if (! user) {
-            return res.status(400).json({error: "not exist that user"})
+            return res.status(RESPONSESTATUS.BadRequest).json({error: "not exist that user"})
         }
         const validPassword = await bcrypt.compare(password,user.password)
         console.log(password,user.password)
         if (! validPassword) {
-            return res.status(400).json({error: "wrong password"})
+            return res.status(RESPONSESTATUS.BadRequest).json({error: "wrong password"})
         }
     } catch (err) {
-        return res.status(400).send(err);
+        return res.status(RESPONSESTATUS.BadRequest).send(err);
     }
-    res.status(200).json({success: "login success"})
+    res.status(RESPONSESTATUS.Success).json({success: "login success"})
 })
 
 module.exports = router;

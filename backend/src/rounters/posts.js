@@ -19,8 +19,6 @@ router.put('/:id', async (req, res) => {
     const {id} = req.params
     const {userId} = req.body
     const post = await Post.findById(id)
-    console.log(post._doc)
-    console.log(id, post.userId, userId)
     if (post.userId === userId) {
         await post.updateOne({$set: req.body})
         return res.status(RESPONSESTATUS.Success).json("Your post has been updated")
@@ -33,8 +31,6 @@ router.delete('/:id', async (req, res) => {
     const {id} = req.params
     const {userId} = req.body
     const post = await Post.findById(id)
-    console.log(post._doc)
-    console.log(id, post.userId, userId)
     if (post.userId === userId) {
         await post.deleteOne()
         return res.status(RESPONSESTATUS.Success).json("Your post has been deleted")
@@ -47,8 +43,6 @@ router.put('/like/:id', async (req, res) => {
     const {id} = req.params
     const {userId} = req.body
     const post = await Post.findById(id)
-    console.log(post._doc)
-    console.log(id, post.userId, userId)
     if (! post.likes.includes(userId)) {
         await post.updateOne({
             $push: {
@@ -75,22 +69,16 @@ router.get('/:id', async (req, res) => {
         return res.status(RESPONSESTATUS.BadRequest).json({error: "Bad request"})
     }
 });
-// get timeline posts
-router.post('/timeline', async (req, res) => {
-    const {userId} = req.body
+
+// get timeline posts for a user
+router.get('/timeline/:userId', async (req, res) => {
     try {
-        const currentUser = await User.findById(userId);
-        const userPosts = await Post.find({userId:currentUser.id})
-        const firendPosts = await Promise.all(
-            currentUser.followings.map(friendId=>{
-               return Post.find({userId:friendId})
-            }
-        ))
-        return res.status(RESPONSESTATUS.Success).json(userPosts.concat(...firendPosts))
+        const currentUser = await User.findById(req.params.userId);
+        const userPosts = await Post.find({userId: currentUser.id})
+        return res.status(RESPONSESTATUS.Success).json(userPosts)
     } catch (err) {
         console.log(err)
         return res.status(RESPONSESTATUS.BadRequest).json({error: "Bad request"})
     }
 });
 module.exports = router;
- 

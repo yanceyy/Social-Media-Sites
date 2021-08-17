@@ -43,7 +43,7 @@ function Topbar({ userInfo }) {
                         <span className="topbarIconBadge">1</span>
                     </span>
                 </div>
-                <LinkW to="/profile">
+                <LinkW to={`/profile/${userInfo._id}`}>
                     <img
                         src={userInfo.avatar || "/utils/dinasour.png"}
                         alt=""

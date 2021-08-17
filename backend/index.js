@@ -10,6 +10,8 @@ dotenv.config();
 
 const app = express();
 
+
+// Connect to mongodb service
 mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -24,18 +26,11 @@ app.use(express.urlencoded());
 app.use(helmet());
 app.use(morgan("common"));
 
+
 app.use("/api/user", userRoute)
 app.use("/api/auth", authRoute)
 app.use("/api/post", postRoute)
 
-
-app.get("/", (req, res) => {
-    res.send("welcome to homepage")
-})
-
-app.get("/users", (req, res) => {
-    res.send("welcome to homepage")
-})
 
 app.listen(8800, () => {
     console.log("server is running");

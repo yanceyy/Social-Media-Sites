@@ -1,12 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./index.less";
 import Topbar from "../../components/topbar";
 import Sidebar from "../../components/sidebar";
 import Rightbar from "../../components/rightbar";
 import Feed from "../../components/feed";
 import { connect } from "react-redux";
+import { getUser, getFeeds } from "../../api/action";
 function ProfilePage(props) {
-    const { userInfo } = props;
+    //const { userInfo } = props;
+    const [userInfo, setUserInfo] = useState({});
+    const [posts, setPosts] = useState([]);
+    const { userId } = props.match.params;
+    useEffect(async () => {
+        const result = await getUser(userId);
+        const posts = await getFeeds(userId);
+        setUserInfo(result);
+        setPosts(posts);
+    }, []);
     return (
         <>
             <Topbar />
@@ -35,7 +45,7 @@ function ProfilePage(props) {
                         </div>
                     </div>
                     <div className="profileRightBottom">
-                        <Feed />
+                        <Feed posts={posts} userNameLists={[userInfo]} />
                         <Rightbar position="profile" />
                     </div>
                 </div>

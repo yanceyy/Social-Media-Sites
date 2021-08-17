@@ -11,7 +11,7 @@ function App() {
         <Provider store={store}>
             <Switch>
                 <Route exact path="/" component={HomePage} />
-                <Route path="/profile" component={ProfilePage} />
+                <Route path="/profile/:userId" component={ProfilePage} />
                 <Route path="/login" component={LoginPage} />
             </Switch>
         </Provider>
