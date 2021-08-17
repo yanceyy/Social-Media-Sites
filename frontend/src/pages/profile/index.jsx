@@ -7,15 +7,12 @@ import Feed from "../../components/feed";
 import { connect } from "react-redux";
 import { getUser, getFeeds } from "../../api/action";
 function ProfilePage(props) {
-    //const { userInfo } = props;
-    const [userInfo, setUserInfo] = useState({});
-    const [posts, setPosts] = useState([]);
+    const [state, setState] = useState({ userInfo: {}, posts: [] });
     const { userId } = props.match.params;
     useEffect(async () => {
-        const result = await getUser(userId);
+        const userInfo = await getUser(userId);
         const posts = await getFeeds(userId);
-        setUserInfo(result);
-        setPosts(posts);
+        setState({ userInfo, posts });
     }, []);
     return (
         <>
@@ -25,27 +22,32 @@ function ProfilePage(props) {
                 <div className="profileRight">
                     <div className="profileRightTop">
                         <div className="profileCover">
-                            {" "}
                             <img
                                 className="profileCoverImg"
-                                src={userInfo.coverPicture || "/utils/2.jpg"}
+                                src={
+                                    state.userInfo.coverPicture ||
+                                    "/utils/2.jpg"
+                                }
                                 alt=""
                             />
                             <img
                                 className="profileUserImg"
-                                src={userInfo.avatar || "/utils/2.jpg"}
+                                src={state.userInfo.avatar || "/utils/2.jpg"}
                                 alt=""
                             />
                         </div>
                         <div className="profileInfo">
                             <h4 className="profileInfoName">
-                                {userInfo.username}
+                                {state.userInfo.username}
                             </h4>
                             <h4 className="profileInfoDesc">Nothing left!</h4>
                         </div>
                     </div>
                     <div className="profileRightBottom">
-                        <Feed posts={posts} userNameLists={[userInfo]} />
+                        <Feed
+                            posts={state.posts}
+                            userNameLists={[state.userInfo]}
+                        />
                         <Rightbar position="profile" />
                     </div>
                 </div>

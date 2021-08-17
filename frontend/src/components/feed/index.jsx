@@ -4,7 +4,6 @@ import Share from "../share";
 import Post from "../post";
 
 function Feed({ posts, userNameLists }) {
-    console.log(posts, userNameLists);
     return (
         <div className="feed">
             <div className="feedWrapper">
