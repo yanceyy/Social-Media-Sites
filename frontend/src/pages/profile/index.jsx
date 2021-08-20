@@ -6,14 +6,15 @@ import Rightbar from "../../components/rightbar";
 import Feed from "../../components/feed";
 import { connect } from "react-redux";
 import { getUser, getFeeds } from "../../api/action";
-function ProfilePage(props) {
+import { useParams } from "react-router";
+function ProfilePage() {
     const [state, setState] = useState({ userInfo: {}, posts: [] });
-    const { userId } = props.match.params;
+    const { userId } = useParams();
     useEffect(async () => {
         const userInfo = await getUser(userId);
         const posts = await getFeeds(userId);
         setState({ userInfo, posts });
-    }, []);
+    }, [userId]);
     return (
         <>
             <Topbar />
@@ -32,7 +33,9 @@ function ProfilePage(props) {
                             />
                             <img
                                 className="profileUserImg"
-                                src={state.userInfo.avatar || "/utils/2.jpg"}
+                                src={
+                                    state.userInfo.avatar || "/utils/unkown.png"
+                                }
                                 alt=""
                             />
                         </div>
@@ -48,7 +51,10 @@ function ProfilePage(props) {
                             posts={state.posts}
                             userNameLists={[state.userInfo]}
                         />
-                        <Rightbar position="profile" />
+                        <Rightbar
+                            position="profile"
+                            userInfo={state.userInfo}
+                        />
                     </div>
                 </div>
             </div>

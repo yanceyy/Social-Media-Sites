@@ -7,7 +7,9 @@ import { getFeedsFromUserList, getUsernname } from "../../api/action";
 import "./index.less";
 import { connect } from "react-redux";
 
+
 function HomePage({ userInfo }) {
+
     const [posts, setPosts] = useState([]);
     const [userNameLists, setUsernameLists] = useState([]);
     const followings = userInfo.followings;

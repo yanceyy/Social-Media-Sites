@@ -1,7 +1,7 @@
 import React from "react";
 import { Cake } from "@material-ui/icons";
 import "./index.less";
-export default function Rightbar({ position }) {
+export default function Rightbar({ userInfo }) {
     const mainPage = (
         <div className="birthdayContainer">
             <Cake htmlColor="red" className="birthdayImg" />
@@ -10,21 +10,33 @@ export default function Rightbar({ position }) {
             </span>
         </div>
     );
-    const profile = (
+
+    // make sure that the when position is not None then do the construction
+    const profile = userInfo && (
         <>
             <h4 className="rightbarTitle">User Information</h4>
             <div className="rightbarInfo">
                 <div className="rightbarInfoItem">
                     <span className="rightbarInfoItemKey">city:</span>
-                    <span className="rightbarInfoItemValue">Melbourne</span>
+                    <span className="rightbarInfoItemValue">
+                        {userInfo.city || "Unkown"}
+                    </span>
                 </div>
                 <div className="rightbarInfoItem">
                     <span className="rightbarInfoItemKey">From:</span>
-                    <span className="rightbarInfoItemValue">VIC</span>
+                    <span className="rightbarInfoItemValue">
+                        {userInfo.from || "Unkown"}
+                    </span>
                 </div>
                 <div className="rightbarInfoItem">
                     <span className="rightbarInfoItemKey">Relationship:</span>
-                    <span className="rightbarInfoItemValue">Single</span>
+                    <span className="rightbarInfoItemValue">
+                        {userInfo.relationship === 1
+                            ? "Single"
+                            : userInfo.relationship === 2
+                            ? "Married"
+                            : "Unkown"}
+                    </span>
                 </div>
             </div>
             <h4 className="rightbarTitle">User friends</h4>
@@ -83,7 +95,7 @@ export default function Rightbar({ position }) {
     return (
         <div className="rightbar">
             <div className="rightbarWrapper">
-                {position ? profile : mainPage}
+                {userInfo ? profile : mainPage}
             </div>
         </div>
     );

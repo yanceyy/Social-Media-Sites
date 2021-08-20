@@ -4,9 +4,11 @@ import {BASEURL} from '../utils/const'
 /*
 account login
 */
-export const login = (username, password) => ajax(BASEURL + "/auth/login", {
-    username,
-    password
+export const login = (email, password) => ajax(BASEURL + "/auth/login", {
+    body: {
+        email,
+        password
+    }
 }, 'POST')
 
 

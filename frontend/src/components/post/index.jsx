@@ -4,7 +4,7 @@ import { PropTypes } from "prop-types";
 import { MoreVert, Favorite, ThumbUp } from "@material-ui/icons";
 import { postTime } from "../../utils/commonfunctions";
 import { likePost } from "../../api/action";
-import { Link } from "react-router-dom";
+import LinkW from "../link";
 //import { getUser } from "../../api/action";
 import { connect } from "react-redux";
 
@@ -31,14 +31,16 @@ function Post({ post, userInfo, id }) {
             <div className="postWrapper">
                 <div className="postTop">
                     <div className="postTopLeft">
-                        <Link to={`/profile/${userInfo._id}`}>
+                        <LinkW to={`/profile/${userInfo._id}`}>
                             <img
                                 src={avatar || "/utils/dinasour.png"}
                                 alt=""
                                 className="postTopLeftImg"
                             />
-                        </Link>
-                        <span className="postUsername">{username}</span>
+                        </LinkW>
+                        <LinkW to={`/profile/${userInfo._id}`}>
+                            <span className="postUsername">{username}</span>
+                        </LinkW>
                         <span className="postTime">{postTime(createdAt)}</span>
                     </div>
                     <div className="postTopRight">
