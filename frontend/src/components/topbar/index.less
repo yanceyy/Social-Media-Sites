@@ -78,6 +78,32 @@
             }
         }
 
+        .logoutContainer {
+            position: relative;
+
+            .logout {
+                display: none;
+            }
+
+            &:hover .logout {
+                left: -10px;
+                border-radius: 5px;
+                display: flex;
+                border: 1px #1877f2 solid;
+                width: 50px;
+                height: 50px;
+                position: absolute;
+                justify-content: center;
+                align-items: center;
+                color: #1877f2;
+                background-color: white;
+
+                span {
+                    cursor: pointer;
+                    background-color: transparent;
+                }
+            }
+        }
 
     }
 

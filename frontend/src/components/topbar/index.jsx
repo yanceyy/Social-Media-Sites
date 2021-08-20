@@ -3,7 +3,10 @@ import { Search, Person, Chat, Notifications } from "@material-ui/icons";
 import "./index.less";
 import LinkW from "../link";
 import { connect } from "react-redux";
+import { Logout } from "../../utils/commonfunctions";
+import { useHistory } from "react-router-dom";
 function Topbar({ userInfo }) {
+    let history = useHistory();
     return (
         <div className="topbarContainer">
             <div className="topbarLeft">
@@ -43,13 +46,18 @@ function Topbar({ userInfo }) {
                         <span className="topbarIconBadge">1</span>
                     </span>
                 </div>
-                <LinkW to={`/profile/${userInfo._id}`}>
-                    <img
-                        src={userInfo.avatar || "/utils/dinasour.png"}
-                        alt=""
-                        className="topbarImg"
-                    />
-                </LinkW>
+                <div className="logoutContainer">
+                    <LinkW to={`/profile/${userInfo._id}`}>
+                        <img
+                            src={userInfo.avatar || "/utils/dinasour.png"}
+                            alt=""
+                            className="topbarImg"
+                        />
+                    </LinkW>
+                    <div className="logout">
+                        <span onClick={() => Logout(history)}>Logout</span>
+                    </div>
+                </div>
             </div>
         </div>
     );

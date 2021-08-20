@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useRef } from "react";
 import "./index.less";
 import { PermMedia, Label, Room, EmojiEmotions } from "@material-ui/icons";
-function Share() {
+import { post } from "../../api/action";
+import { connect } from "react-redux";
+
+function Share({ userInfo }) {
+    const postContent = useRef();
+    const postFeed = async () => {
+        console.log(postContent.current.value);
+        if (postContent.current.value.trim().lenghth !== 0) {
+            await post(userInfo._id, postContent.current.value);
+        }
+    };
     return (
         <div className="share">
             <div className="shareWrapper">
@@ -12,6 +22,7 @@ function Share() {
                         className="shareTopImg"
                     />
                     <input
+                        ref={postContent}
                         type="text"
                         className="shareTopInput"
                         placeholder="whats' in your mind"
@@ -50,7 +61,9 @@ function Share() {
                             />
                             <span className="shareOptionText">Feelings</span>
                         </div>
-                        <button className="shareButton">Share</button>
+                        <button className="shareButton" onClick={postFeed}>
+                            Share
+                        </button>
                     </div>
                 </div>
             </div>
@@ -58,4 +71,4 @@ function Share() {
     );
 }
 
-export default Share;
+export default connect((state) => ({ userInfo: state.userInfo }))(Share);

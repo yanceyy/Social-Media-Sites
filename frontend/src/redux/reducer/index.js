@@ -19,7 +19,7 @@ const userInfoSet = (state = userInfo, action) => {
     switch (action.type) {
         case "setUser":
             {
-                SetFromLocalStorage(JSON.stringify(action.value))
+                SetFromLocalStorage(action.value)
                 return action.value
             }
         default:

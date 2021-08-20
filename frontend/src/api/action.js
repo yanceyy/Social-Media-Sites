@@ -13,6 +13,28 @@ export const login = (email, password) => ajax(BASEURL + "/auth/login", {
 
 
 /*
+account register
+*/
+export const register = (username, email, password) => ajax(BASEURL + "/auth/register", {
+    body: {
+        username,
+        email,
+        password
+    }
+}, 'POST')
+
+/*
+Post
+*/
+export const post = (userId, description) => ajax(BASEURL + "/post", {
+    body: {
+        userId,
+        description
+    }
+}, 'POST')
+
+
+/*
 Post get all posts
 */
 export const getFeeds = (userId) => ajax(BASEURL + "/post/timeline/" + userId, {})

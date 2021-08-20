@@ -1,17 +1,20 @@
 import React, { useRef, useState } from "react";
 import "./index.less";
-import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { SetUserInfo } from "../../redux/action/Auth";
-import { login } from "../../api/action";
+import { register } from "../../api/action";
 import Snackbar from "@material-ui/core/Snackbar";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { useHistory } from "react-router-dom";
 
 function LoginPage(props) {
     const history = useHistory();
     const email = useRef();
     const password = useRef();
+    const [passwordagain, setpasswordagain] = useState("");
+    const username = useRef();
     const [isactive, setActive] = useState(false);
+    const [checkpasswordAgain, updatecheckpasswordAgain] = useState(null);
     const [state, setState] = useState({
         open: false,
         vertical: "top",
@@ -26,20 +29,41 @@ function LoginPage(props) {
         });
     };
 
+    const handlepassword = (e) => {
+        setpasswordagain(e.target.value);
+
+        //debounce
+        if (checkpasswordAgain) {
+            clearTimeout(checkpasswordAgain);
+            updatecheckpasswordAgain(null);
+        }
+        const passwordAgainT = setTimeout(() => {
+            if (e.target.value !== password.current.value) {
+                e.target.classList.add("wrong");
+            } else {
+                e.target.classList.remove("wrong");
+            }
+        }, 500);
+        updatecheckpasswordAgain(passwordAgainT);
+    };
+
     const handleClose = () => {
         setState({ ...state, open: false });
     };
 
-    const handleLogin = async (e) => {
-        setActive(true);
+    const handleSignup = async (e) => {
         e.preventDefault();
+        if (password.current.value !== passwordagain) {
+            password.current.setCustomValidity("Password don't match");
+        }
+        setActive(true);
         try {
-            const res = await login(
+            await register(
+                username.current.value,
                 email.current.value,
                 password.current.value
             );
-            props.setUserInf(res.userInfo);
-            props.history.push("/");
+            props.history.push("/login");
         } catch (error) {
             handleClick();
         } finally {
@@ -60,8 +84,16 @@ function LoginPage(props) {
                     <h3 className="loginLogo">SocialWhat</h3>
                     <span className="loginDesc">Embrace the World</span>
                 </div>
-                <div className="loginRight" onSubmit={handleLogin}>
+                <div className="loginRight" onSubmit={handleSignup}>
                     <form className="loginBox">
+                        <input
+                            type="text"
+                            placeholder="Username"
+                            ref={username}
+                            maxLength="18"
+                            minLength="3"
+                            required
+                        />
                         <input
                             type="email"
                             placeholder="Email"
@@ -72,23 +104,32 @@ function LoginPage(props) {
                             type="password"
                             placeholder="Password"
                             ref={password}
-                            required
                             maxLength="18"
                             minLength="6"
+                            required
+                        />
+                        <input
+                            type="password"
+                            placeholder="Input Password again"
+                            value={passwordagain}
+                            onChange={handlepassword}
+                            maxLength="18"
+                            minLength="6"
+                            required
                         />
                         <button className="LoginButton" disabled={isactive}>
                             {isactive ? (
                                 <CircularProgress size="20px" />
                             ) : (
-                                "Login"
+                                "Create"
                             )}
                         </button>
                         <div className="loginForget">Forget password?</div>
                         <button
                             className="loginRegisterButton"
-                            onClick={() => history.push("/register")}
+                            onClick={() => history.push("/login")}
                         >
-                            Create a New account
+                            Login
                         </button>
                     </form>
                 </div>
