@@ -7,14 +7,13 @@ import { getFeedsFromUserList, getUsernname } from "../../api/action";
 import "./index.less";
 import { connect } from "react-redux";
 
-
 function HomePage({ userInfo }) {
-
     const [posts, setPosts] = useState([]);
     const [userNameLists, setUsernameLists] = useState([]);
-    const followings = userInfo.followings;
     useEffect(async () => {
         try {
+            const followings = [...userInfo.followings];
+            followings.push(userInfo._id);
             const Usernames = await getUsernname(followings);
             setUsernameLists(Usernames);
             const Feeds = await getFeedsFromUserList(followings);

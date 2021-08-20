@@ -6,10 +6,12 @@ const morgan = require('morgan');
 const userRoute = require('./src/rounters/users');
 const authRoute = require('./src/rounters/auth');
 const postRoute = require('./src/rounters/posts');
+const cors = require('cors');
 dotenv.config();
 
 const app = express();
 
+app.use(cors());
 
 // Connect to mongodb service
 mongoose.connect(process.env.MONGO_URL, {
@@ -32,6 +34,6 @@ app.use("/api/auth", authRoute)
 app.use("/api/post", postRoute)
 
 
-app.listen(8800, () => {
+app.listen(process.env.PORT || 8800, () => {
     console.log("server is running");
 });

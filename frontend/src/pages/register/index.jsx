@@ -71,7 +71,7 @@ function LoginPage(props) {
         }
     };
     return (
-        <div className="login">
+        <div className="register">
             <Snackbar
                 anchorOrigin={{ vertical, horizontal }}
                 open={open}
@@ -110,7 +110,7 @@ function LoginPage(props) {
                         />
                         <input
                             type="password"
-                            placeholder="Input Password again"
+                            placeholder="Password again"
                             value={passwordagain}
                             onChange={handlepassword}
                             maxLength="18"
