@@ -1,15 +1,40 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import "./index.less";
 import { PermMedia, Label, Room, EmojiEmotions } from "@material-ui/icons";
-import { post } from "../../api/action";
+import { post, upload } from "../../api/action";
 import { connect } from "react-redux";
 
 function Share({ userInfo }) {
+    const [file, setFile] = useState(null);
     const postContent = useRef();
-    const postFeed = async () => {
-        console.log(postContent.current.value);
-        if (postContent.current.value.trim().lenghth !== 0) {
-            await post(userInfo._id, postContent.current.value);
+    const postFeed = async (e) => {
+        e.preventDefault();
+        const newPost = {
+            userId: userInfo._id,
+            description: postContent.current.value,
+        };
+
+        if (file) {
+            const data = new FormData();
+            data.append("file", file);
+            data.append("name", file.name);
+
+            try {
+                const filename = await upload(data);
+                newPost.image = filename.filePath;
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        if (postContent.current.value.trim().length !== 0) {
+            try {
+                console.log(newPost);
+                await post(newPost);
+                window.location.reload();
+            } catch (error) {
+                console.log(error);
+            }
         }
     };
     return (
@@ -17,7 +42,7 @@ function Share({ userInfo }) {
             <div className="shareWrapper">
                 <div className="shareTop">
                     <img
-                        src="/utils/dinasour.png"
+                        src={userInfo.avatar || "/utils/unkown.png"}
                         alt=""
                         className="shareTopImg"
                     />
@@ -25,13 +50,13 @@ function Share({ userInfo }) {
                         ref={postContent}
                         type="text"
                         className="shareTopInput"
-                        placeholder="whats' in your mind"
+                        placeholder={`what's in your mind ${userInfo.username}?`}
                     />
                 </div>
                 <hr className="shareHr" />
-                <div className="shareBottom">
+                <form className="shareBottom" onSubmit={postFeed}>
                     <div className="shareOptions">
-                        <div className="shareOption">
+                        <label className="shareOption" htmlFor="file">
                             <PermMedia
                                 htmlColor="tomato"
                                 className="shareOptionIcon"
@@ -39,7 +64,14 @@ function Share({ userInfo }) {
                             <span className="shareOptionText">
                                 Photo or Video
                             </span>
-                        </div>
+                            <input
+                                style={{ display: "none" }}
+                                type="file"
+                                id="file"
+                                accept=".png,.jpeg,.jpg"
+                                onChange={(e) => setFile(e.target.files[0])}
+                            />
+                        </label>
                         <div className="shareOption">
                             <Label
                                 htmlColor="blue"
@@ -61,11 +93,9 @@ function Share({ userInfo }) {
                             />
                             <span className="shareOptionText">Feelings</span>
                         </div>
-                        <button className="shareButton" onClick={postFeed}>
-                            Share
-                        </button>
+                        <button className="shareButton">Share</button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     );

@@ -21,6 +21,9 @@ function HomePage({ userInfo }) {
             Feeds.forEach((feed) => {
                 AllFeeds.push(...feed);
             });
+            AllFeeds.sort((p1, p2) => {
+                return new Date(p2.createdAt) - new Date(p1.createdAt);
+            });
             setPosts(AllFeeds);
         } catch (err) {
             console.log("wrong happend", err);

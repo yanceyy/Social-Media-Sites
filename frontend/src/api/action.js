@@ -26,10 +26,11 @@ export const register = (username, email, password) => ajax(BASEURL + "/auth/reg
 /*
 Post
 */
-export const post = (userId, description) => ajax(BASEURL + "/post", {
+export const post = ({userId, description, image}) => ajax(BASEURL + "/post", {
     body: {
         userId,
-        description
+        description,
+        image
     }
 }, 'POST')
 
@@ -70,3 +71,11 @@ export const getUsernname = (userIdArray) => {
     const promiseArray = userIdArray.map(userId => getUser(userId))
     return Promise.all(promiseArray)
 }
+
+
+/*
+upload images
+*/
+export const upload = (data) => ajax(BASEURL + "/upload", {
+    body: data
+}, 'POST')

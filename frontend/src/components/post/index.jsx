@@ -7,7 +7,7 @@ import { likePost } from "../../api/action";
 import LinkW from "../link";
 //import { getUser } from "../../api/action";
 import { connect } from "react-redux";
-
+import { BASEIMAGEURL } from "../../utils/const";
 function Post({ post, userInfo, id }) {
     const { username, avatar } = userInfo;
     const { description, comment, image, _id, createdAt } = post;
@@ -33,7 +33,7 @@ function Post({ post, userInfo, id }) {
                     <div className="postTopLeft">
                         <LinkW to={`/profile/${userInfo._id}`}>
                             <img
-                                src={avatar || "/utils/dinasour.png"}
+                                src={avatar || "/utils/unkown.png"}
                                 alt=""
                                 className="postTopLeftImg"
                             />
@@ -54,7 +54,7 @@ function Post({ post, userInfo, id }) {
                     {image ? (
                         <img
                             loading="lazy"
-                            src={image}
+                            src={BASEIMAGEURL + image}
                             alt=""
                             className="postImg"
                         />

@@ -49,7 +49,7 @@ function Topbar({ userInfo }) {
                 <div className="logoutContainer">
                     <LinkW to={`/profile/${userInfo._id}`}>
                         <img
-                            src={userInfo.avatar || "/utils/dinasour.png"}
+                            src={userInfo.avatar || "/utils/unkown.png"}
                             alt=""
                             className="topbarImg"
                         />

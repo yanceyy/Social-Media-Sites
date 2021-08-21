@@ -7,14 +7,16 @@ import Snackbar from "@material-ui/core/Snackbar";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { useHistory } from "react-router-dom";
 
-function LoginPage(props) {
+/*
+
+*/
+function RegisterPage(props) {
     const history = useHistory();
     const email = useRef();
     const password = useRef();
     const [passwordagain, setpasswordagain] = useState("");
     const username = useRef();
     const [isactive, setActive] = useState(false);
-    const [checkpasswordAgain, updatecheckpasswordAgain] = useState(null);
     const [state, setState] = useState({
         open: false,
         vertical: "top",
@@ -33,18 +35,17 @@ function LoginPage(props) {
         setpasswordagain(e.target.value);
 
         //debounce
-        if (checkpasswordAgain) {
-            clearTimeout(checkpasswordAgain);
-            updatecheckpasswordAgain(null);
+        if (RegisterPage.reenterPassword) {
+            clearTimeout(RegisterPage.reenterPassword);
+            RegisterPage.reenterPassword = null;
         }
-        const passwordAgainT = setTimeout(() => {
+        RegisterPage.reenterPassword = setTimeout(() => {
             if (e.target.value !== password.current.value) {
                 e.target.classList.add("wrong");
             } else {
                 e.target.classList.remove("wrong");
             }
         }, 500);
-        updatecheckpasswordAgain(passwordAgainT);
     };
 
     const handleClose = () => {
@@ -138,6 +139,8 @@ function LoginPage(props) {
     );
 }
 
+RegisterPage.reenterPassword = null;
+
 function setUserInformation(dispatch) {
     return {
         setUserInf: (userInfo) => dispatch(SetUserInfo(userInfo)),
@@ -147,4 +150,4 @@ function setUserInformation(dispatch) {
 export default connect(
     (state) => ({ userInfo: state.userInfo }),
     setUserInformation
-)(LoginPage);
+)(RegisterPage);
