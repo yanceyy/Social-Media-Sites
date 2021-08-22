@@ -84,8 +84,9 @@ function Post({ post, userInfo, id, deletePost: dp }) {
                 <div className="postBottom">
                     <div className="postBottomLeft">
                         <Favorite
-                            htmlColor="red"
-                            className="Likebutton"
+                            className={
+                                "Likebutton" + (like ? " alreadyLike" : "")
+                            }
                             onClick={likeIt}
                         />
                         <ThumbUp htmlColor="orange" className="Thumbbutton" />

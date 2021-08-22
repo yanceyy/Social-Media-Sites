@@ -91,11 +91,33 @@
                 .Thumbbutton {
                     margin-right: 5px;
                     cursor: pointer;
+
                 }
+
+                .Likebutton {
+                    color: grey;
+
+                }
+
+                .alreadyLike {
+                    color: red;
+                    animation-name: likes;
+                    animation-duration: 0.2s;
+                }
+
 
                 .postLikeCounter {
                     margin-left: 5px;
                     font-size: 15px;
+                }
+
+                /*
+                animation to show the heat beats
+                */
+                @keyframes likes {
+                    to {
+                        transform: scale(1.2);
+                    }
                 }
 
 
