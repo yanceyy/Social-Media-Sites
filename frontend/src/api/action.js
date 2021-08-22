@@ -36,6 +36,16 @@ export const post = ({userId, description, image}) => ajax(BASEURL + "/post", {
 
 
 /*
+Delete Post
+*/
+export const deletePost = ({userId, postId}) => ajax(BASEURL + "/post/" + postId, {
+    body: {
+        userId
+    }
+}, 'DELETE')
+
+
+/*
 Post get all posts
 */
 export const getFeeds = (userId) => ajax(BASEURL + "/post/timeline/" + userId, {})

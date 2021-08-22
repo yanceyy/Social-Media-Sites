@@ -36,7 +36,33 @@
             }
 
             .postTopRight {
-                cursor: pointer;
+                position: relative;
+
+                .MoreVert {
+                    cursor: pointer;
+                }
+
+                .menu {
+                    position: absolute;
+                    border: 1px grey solid;
+                    border-radius: 4px;
+                    overflow: hidden;
+                    left: -11px;
+
+                    li {
+                        padding: 3px;
+                        border-bottom: 1px grey solid;
+                        cursor: pointer;
+                    }
+
+                    .menu_share {
+                        background-color: aquamarine;
+                    }
+
+                    .menu_delete {
+                        background-color: rgb(232, 159, 159);
+                    }
+                }
             }
         }
 

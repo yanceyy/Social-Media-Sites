@@ -3,13 +3,14 @@ import "./index.less";
 import { PropTypes } from "prop-types";
 import { MoreVert, Favorite, ThumbUp } from "@material-ui/icons";
 import { postTime } from "../../utils/commonfunctions";
-import { likePost } from "../../api/action";
+import { likePost, deletePost } from "../../api/action";
 import LinkW from "../link";
 //import { getUser } from "../../api/action";
 import { connect } from "react-redux";
 import { BASEIMAGEURL } from "../../utils/const";
-function Post({ post, userInfo, id }) {
-    const { username, avatar } = userInfo;
+function Post({ post, userInfo, id, deletePost: dp }) {
+    const { username, avatar, _id: userId } = userInfo;
+    const [showMenu, setShowMenu] = useState(false);
     const { description, comment, image, _id, createdAt } = post;
     const [like, setLike] = useState(post.likes ? post.likes.length : 0);
     const [hasLiked, sethasLiked] = useState(
@@ -24,6 +25,15 @@ function Post({ post, userInfo, id }) {
             sethasLiked(false);
         }
         await likePost(id, _id);
+    };
+
+    const openMenu = () => {
+        setShowMenu((s) => !s);
+    };
+
+    const deleteAction = async () => {
+        await deletePost({ userId, postId: _id });
+        dp();
     };
 
     return (
@@ -44,7 +54,18 @@ function Post({ post, userInfo, id }) {
                         <span className="postTime">{postTime(createdAt)}</span>
                     </div>
                     <div className="postTopRight">
-                        <MoreVert />
+                        <MoreVert className="MoreVert" onClick={openMenu} />
+                        {showMenu && (
+                            <ul className="menu">
+                                <li className="menu_share">Share</li>
+                                <li
+                                    className="menu_delete"
+                                    onClick={deleteAction}
+                                >
+                                    Delete
+                                </li>
+                            </ul>
+                        )}
                     </div>
                 </div>
                 <div className="postCenter">
