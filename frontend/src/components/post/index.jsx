@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./index.less";
 import { PropTypes } from "prop-types";
 import { MoreVert, Favorite, ThumbUp } from "@material-ui/icons";
@@ -11,11 +11,17 @@ import { BASEIMAGEURL } from "../../utils/const";
 function Post({ post, userInfo, id, deletePost: dp }) {
     const { username, avatar, _id: userId } = userInfo;
     const [showMenu, setShowMenu] = useState(false);
+    const muneRef = useRef();
     const { description, comment, image, _id, createdAt } = post;
     const [like, setLike] = useState(post.likes ? post.likes.length : 0);
     const [hasLiked, sethasLiked] = useState(
         post.likes ? (post.likes.indexOf(id) !== -1 ? true : false) : false
     );
+    useEffect(() => {
+        document.addEventListener("click", () => {
+            setShowMenu(false);
+        });
+    }, []);
     const likeIt = async () => {
         if (!hasLiked) {
             setLike(like + 1);
@@ -27,7 +33,8 @@ function Post({ post, userInfo, id, deletePost: dp }) {
         await likePost(id, _id);
     };
 
-    const openMenu = () => {
+    const openMenu = (ev) => {
+        ev.stopPropagation();
         setShowMenu((s) => !s);
     };
 
@@ -53,7 +60,7 @@ function Post({ post, userInfo, id, deletePost: dp }) {
                         </LinkW>
                         <span className="postTime">{postTime(createdAt)}</span>
                     </div>
-                    <div className="postTopRight">
+                    <div className="postTopRight" ref={muneRef}>
                         <MoreVert className="MoreVert" onClick={openMenu} />
                         {showMenu && (
                             <ul className="menu">
