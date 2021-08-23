@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import "./index.less";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
@@ -25,6 +25,10 @@ function LoginPage(props) {
             horizontal: "center",
         });
     };
+    useEffect(() => {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+    }, []);
 
     const handleClose = () => {
         setState({ ...state, open: false });
@@ -38,6 +42,8 @@ function LoginPage(props) {
                 email.current.value,
                 password.current.value
             );
+            localStorage.setItem("accessToken", res.userInfo.accessToken);
+            localStorage.setItem("refreshToken", res.userInfo.refreshToken);
             props.setUserInf(res.userInfo);
             props.history.push("/");
         } catch (error) {

@@ -10,6 +10,7 @@ const postRoute = require('./src/rounters/posts');
 const path = require('path');
 const {v4: uuidv4} = require('uuid');
 const cors = require('cors');
+
 dotenv.config();
 
 const app = express();

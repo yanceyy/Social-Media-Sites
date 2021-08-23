@@ -3,9 +3,14 @@ const bcrypt = require('bcrypt');
 const User = require('../models/User')
 const mongoose = require('mongoose')
 const RESPONSESTATUS = require('../utils/responseStatus')
-
+const {ValidaToken} = require('../utils/jwt')
 // update user info
-router.put("/", async (req, res) => {
+router.put("/", ValidaToken, async (req, res) => {
+    try {
+        ValidaToken(req)
+    } catch (err) {
+        return res.status(RESPONSESTATUS.BadRequest).json({error: "Invalid User"})
+    }
     let {userId, password} = req.body
     try {
         const salt = await bcrypt.genSalt(10);
@@ -38,7 +43,6 @@ router.delete("/", async (req, res) => {
 // get a user
 router.get("/", async (req, res) => {
     let {id} = req.query
-    console.log(id)
     try {
         const user = await User.findById(id)
         const {
@@ -51,7 +55,6 @@ router.get("/", async (req, res) => {
         console.dir(user)
         return res.status(RESPONSESTATUS.Success).json(other)
     } catch (err) {
-        console.log(err)
         return res.status(403).json({error: "illeage request"})
     }
 })
@@ -62,7 +65,6 @@ router.get("/", async (req, res) => {
 
 router.patch("/", async (req, res) => {
     let {selfId, userId, action} = req.body
-    console.log(selfId, userId, action)
     if (selfId === userId) {
         return res.status(RESPONSESTATUS.BadRequest).json({error: "You cannot follow and unfollow youself"})
     }
@@ -77,7 +79,6 @@ router.patch("/", async (req, res) => {
             } else {
 
                 const self = await User.findById(selfId)
-                console.log("correct")
                 if (self) {
                     await user.updateOne({
                         $push: {
@@ -102,7 +103,6 @@ router.patch("/", async (req, res) => {
             } else {
 
                 const self = await User.findById(selfId)
-                console.log("correct")
                 if (self) {
                     await user.updateOne({
                         $pull: {
@@ -122,7 +122,6 @@ router.patch("/", async (req, res) => {
             return res.status(RESPONSESTATUS.BadRequest).json({error: "wrong action"})
         }
     } catch (err) {
-        console.log(err)
         return res.status(RESPONSESTATUS.BadRequest).json({error: "Bad request"})
     }
 })

@@ -2,9 +2,10 @@ const router = require('express').Router();
 const RESPONSESTATUS = require('../utils/responseStatus');
 const Post = require('../models/Post');
 const User = require('../models/User')
-
+const {ValidaToken} = require('../utils/jwt')
 // create a post
-router.post('/', async (req, res) => {
+router.post('/', ValidaToken, async (req, res) => {
+
     const newPost = new Post(req.body)
     try {
         const savedPost = await newPost.save()
@@ -15,7 +16,7 @@ router.post('/', async (req, res) => {
 })
 
 // update a post
-router.put('/:id', async (req, res) => {
+router.put('/:id', ValidaToken, async (req, res) => {
     const {id} = req.params
     const {userId} = req.body
     const post = await Post.findById(id)
@@ -27,7 +28,7 @@ router.put('/:id', async (req, res) => {
     }
 })
 // delete a post
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', ValidaToken, async (req, res) => {
     const {id} = req.params
     const {userId} = req.body
     const post = await Post.findById(id)
@@ -39,7 +40,7 @@ router.delete('/:id', async (req, res) => {
     }
 })
 // like a post
-router.put('/like/:id', async (req, res) => {
+router.put('/like/:id', ValidaToken, async (req, res) => {
     const {id} = req.params
     const {userId} = req.body
     const post = await Post.findById(id)
@@ -77,7 +78,6 @@ router.get('/timeline/:userId', async (req, res) => {
         const userPosts = await Post.find({userId: currentUser.id})
         return res.status(RESPONSESTATUS.Success).json(userPosts)
     } catch (err) {
-        console.log(err)
         return res.status(RESPONSESTATUS.BadRequest).json({error: "Bad request"})
     }
 });
