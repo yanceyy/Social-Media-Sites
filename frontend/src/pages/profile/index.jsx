@@ -10,13 +10,15 @@ import { useParams } from "react-router";
 function ProfilePage() {
     const [state, setState] = useState({ userInfo: {}, posts: [] });
     const { userId } = useParams();
-    useEffect(async () => {
-        const userInfo = await getUser(userId);
-        const posts = await getFeeds(userId);
-        posts.sort((p1, p2) => {
-            return new Date(p2.createdAt) - new Date(p1.createdAt);
-        });
-        setState({ userInfo, posts });
+    useEffect(() => {
+        (async () => {
+            const userInfo = await getUser(userId);
+            const posts = await getFeeds(userId);
+            posts.sort((p1, p2) => {
+                return new Date(p2.createdAt) - new Date(p1.createdAt);
+            });
+            setState({ userInfo, posts });
+        })();
     }, [userId]);
     return (
         <>
