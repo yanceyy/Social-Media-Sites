@@ -3,6 +3,7 @@ const RESPONSESTATUS = require('../utils/responseStatus');
 const Post = require('../models/Post');
 const User = require('../models/User')
 const {ValidaToken} = require('../utils/jwt')
+const Comment = require('../models/Comment')
 // create a post
 router.post('/', ValidaToken, async (req, res) => {
 
@@ -75,9 +76,20 @@ router.get('/:id', async (req, res) => {
 router.get('/timeline/:userId', async (req, res) => {
     try {
         const currentUser = await User.findById(req.params.userId);
-        const userPosts = await Post.find({userId: currentUser.id})
+        const userPosts = await Post.find({userId: currentUser.id}).lean()
+        // can't use foreach in there since async callback runction will be finished
+        // after it has been returned
+        for (let i = 0; i < userPosts.length; i++) {
+            const post = userPosts[i]
+            if (post.comments) {
+                const comments = post.comments.map(comment => Comment.findById(comment))
+                const res = await Promise.all(comments)
+                post['comments'] = res
+            }
+        }
         return res.status(RESPONSESTATUS.Success).json(userPosts)
     } catch (err) {
+        console.log(err)
         return res.status(RESPONSESTATUS.BadRequest).json({error: "Bad request"})
     }
 });

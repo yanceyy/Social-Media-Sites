@@ -6,13 +6,22 @@ const Comment = require('../models/Comment')
 const {ValidaToken} = require('../utils/jwt');
 
 // create a comments
-router.post('/', ValidaToken, async (req, res) => {
-
-    const newPost = new Post(req.body)
+router.post('/', async (req, res) => {
+    const {postId} = req.body
+    const post = await Post.findById(postId)
     try {
-        const savedPost = await newPost.save()
-        return res.status(RESPONSESTATUS.Success).json(savedPost)
-    } catch (err) {
+        if (post) {
+            const newComment = new Comment(JSON.parse(req.body.comment))
+            const savedComments = await newComment.save()
+            await post.updateOne({
+                $push: {
+                    comments: savedComments._id.toString()
+                }
+            })
+            return res.status(RESPONSESTATUS.Success).json(savedComments)
+        }
+    } catch (error) {
+        console.log(err)
         return res.status(RESPONSESTATUS.BadRequest).json({error: "Bad request"})
     }
 })

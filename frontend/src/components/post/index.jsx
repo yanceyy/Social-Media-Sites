@@ -13,7 +13,7 @@ function Post({ post, userInfo, id, deletePost: dp }) {
     const { username, avatar, _id: userId } = userInfo;
     const [showMenu, setShowMenu] = useState(false);
     const muneRef = useRef();
-    const { description, comment, image, _id, createdAt } = post;
+    const { description, comments, image, _id, createdAt } = post;
     const [like, setLike] = useState(post.likes ? post.likes.length : 0);
     const [hasLiked, sethasLiked] = useState(
         post.likes ? (post.likes.indexOf(id) !== -1 ? true : false) : false
@@ -108,10 +108,17 @@ function Post({ post, userInfo, id, deletePost: dp }) {
                     </div>
                     <div className="postBottomRight">
                         <span className="postCommentText">
-                            {comment} comments
+                            {comments ? comments.length : 0} comments
                         </span>
                     </div>
                 </div>
+                <ul className="comments">
+                    {comments
+                        ? comments.map((comment) => (
+                              <li key={comment._id}>{comment.description}</li>
+                          ))
+                        : 0}
+                </ul>
                 <hr className="shareHr" />
                 <Postnewcommpoents />
             </div>
