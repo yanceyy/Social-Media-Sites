@@ -37,7 +37,11 @@ function HomePage({ userInfo }) {
             <div className="homeContainer">
                 <Sidebar />
                 <div className="rightPlanel">
-                    <Feed userNameLists={userNameLists} posts={posts} />
+                    <Feed
+                        userNameLists={userNameLists}
+                        posts={posts}
+                        iself={true}
+                    />
                     <Rightbar />
                 </div>
             </div>

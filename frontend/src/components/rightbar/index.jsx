@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Cake } from "@material-ui/icons";
 import "./index.less";
-export default function Rightbar({ userInfo }) {
+import { follow, unfollow } from "../../api/action";
+export default function Rightbar({ userInfo, iself, selfInfo }) {
     const mainPage = (
         <div className="birthdayContainer">
             <Cake htmlColor="red" className="birthdayImg" />
@@ -10,10 +11,44 @@ export default function Rightbar({ userInfo }) {
             </span>
         </div>
     );
+    const [isfollowing, setIsfollowing] = useState(false);
+    useEffect(() => {
+        if (
+            userInfo &&
+            !(
+                Object.keys(userInfo).length === 0 &&
+                userInfo.constructor === Object
+            )
+        )
+            (() => {
+                setIsfollowing(userInfo.followers.includes(selfInfo._id));
+            })();
+    }, [userInfo]);
+    const followAction = async () => {
+        if (isfollowing) {
+            await unfollow({ selfId: selfInfo._id, userId: userInfo._id });
+            setIsfollowing(false);
+        } else {
+            await follow({ selfId: selfInfo._id, userId: userInfo._id });
+            setIsfollowing(true);
+        }
+    };
 
     // make sure that the when position is not None then do the construction
     const profile = userInfo && (
         <>
+            {iself ? null : (
+                <div className="rightbarInfo">
+                    <button
+                        onClick={followAction}
+                        className={
+                            "followButton" + (isfollowing ? " active" : "")
+                        }
+                    >
+                        {isfollowing ? "unfollow" : "follow"}
+                    </button>
+                </div>
+            )}
             <h4 className="rightbarTitle">User Information</h4>
             <div className="rightbarInfo">
                 <div className="rightbarInfoItem">

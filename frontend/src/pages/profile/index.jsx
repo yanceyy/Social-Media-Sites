@@ -7,8 +7,9 @@ import Feed from "../../components/feed";
 import { connect } from "react-redux";
 import { getUser, getFeeds } from "../../api/action";
 import { useParams } from "react-router";
-function ProfilePage() {
+function ProfilePage({ userInfo: selfInfo }) {
     const [state, setState] = useState({ userInfo: {}, posts: [] });
+    const [iself, setIsself] = useState(true);
     const { userId } = useParams();
     useEffect(() => {
         (async () => {
@@ -18,6 +19,8 @@ function ProfilePage() {
                 return new Date(p2.createdAt) - new Date(p1.createdAt);
             });
             setState({ userInfo, posts });
+            setIsself(selfInfo._id === userId);
+            console.log("dsd", userInfo);
         })();
     }, [userId]);
     return (
@@ -55,10 +58,13 @@ function ProfilePage() {
                         <Feed
                             posts={state.posts}
                             userNameLists={[state.userInfo]}
+                            iself={iself}
                         />
                         <Rightbar
+                            iself={iself}
                             position="profile"
                             userInfo={state.userInfo}
+                            selfInfo={selfInfo}
                         />
                     </div>
                 </div>

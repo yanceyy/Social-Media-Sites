@@ -89,3 +89,24 @@ upload images
 export const upload = (data) => ajax(BASEURL + "/upload", {
     body: data
 }, 'POST')
+
+
+/*
+follow somebody
+*/
+export const follow = (data) => ajax(BASEURL + "/user", {
+    body: {
+        ...data,
+        action: "follow"
+    }
+}, 'PATCH')
+
+/*
+unfollow somebody
+*/
+export const unfollow = (data) => ajax(BASEURL + "/user", {
+    body: {
+        ...data,
+        action: "unfollow"
+    }
+}, 'PATCH')

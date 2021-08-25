@@ -50,7 +50,7 @@ export default function ajax(url, data = {}, type = "GET") {
         request.then(response => {
             resolve(response.data)
         }).catch(error => {
-            if (error.response.status == 401) {
+            if (error.response&&error.response.status == 401) {
                 localStorage.clear()
                 alert("Unauthorization users")
                 window.location.href = "/login"

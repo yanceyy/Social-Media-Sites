@@ -8,6 +8,7 @@ import LinkW from "../link";
 //import { getUser } from "../../api/action";
 import { connect } from "react-redux";
 import { BASEIMAGEURL } from "../../utils/const";
+import Postnewcommpoents from "./postnewcommpoents";
 function Post({ post, userInfo, id, deletePost: dp }) {
     const { username, avatar, _id: userId } = userInfo;
     const [showMenu, setShowMenu] = useState(false);
@@ -65,12 +66,14 @@ function Post({ post, userInfo, id, deletePost: dp }) {
                         {showMenu && (
                             <ul className="menu">
                                 <li className="menu_share">Share</li>
-                                <li
-                                    className="menu_delete"
-                                    onClick={deleteAction}
-                                >
-                                    Delete
-                                </li>
+                                {id === userId ? (
+                                    <li
+                                        className="menu_delete"
+                                        onClick={deleteAction}
+                                    >
+                                        Delete
+                                    </li>
+                                ) : null}
                             </ul>
                         )}
                     </div>
@@ -92,7 +95,7 @@ function Post({ post, userInfo, id, deletePost: dp }) {
                     <div className="postBottomLeft">
                         <Favorite
                             className={
-                                "Likebutton" + (like ? " alreadyLike" : "")
+                                "Likebutton" + (hasLiked ? " alreadyLike" : "")
                             }
                             onClick={likeIt}
                         />
@@ -109,6 +112,8 @@ function Post({ post, userInfo, id, deletePost: dp }) {
                         </span>
                     </div>
                 </div>
+                <hr className="shareHr" />
+                <Postnewcommpoents />
             </div>
         </div>
     );

@@ -3,12 +3,11 @@ import "./index.less";
 import Share from "../share";
 import Post from "../post";
 
-function Feed({ posts: p, userNameLists }) {
+function Feed({ posts: p, userNameLists, iself }) {
     const [posts, setPosts] = useState([]);
     const deletePost = (postId) => {
         setPosts(posts.filter((post) => post._id !== postId));
     };
-
     useEffect(() => {
         setPosts(p);
     }, [p]);
@@ -16,7 +15,7 @@ function Feed({ posts: p, userNameLists }) {
     return (
         <div className="feed">
             <div className="feedWrapper">
-                <Share />
+                {iself ? <Share /> : null}
                 {posts.map((post) => {
                     return (
                         <Post

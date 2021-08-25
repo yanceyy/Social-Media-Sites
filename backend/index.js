@@ -7,6 +7,7 @@ const multer = require('multer');
 const userRoute = require('./src/rounters/users');
 const authRoute = require('./src/rounters/auth');
 const postRoute = require('./src/rounters/posts');
+const commentRoute = require('./src/rounters/comments');
 const path = require('path');
 const {v4: uuidv4} = require('uuid');
 const cors = require('cors');
@@ -51,6 +52,7 @@ app.use(morgan("common"));
 app.use("/api/user", userRoute)
 app.use("/api/auth", authRoute)
 app.use("/api/post", postRoute)
+app.use("/api/comment", commentRoute)
 
 
 app.listen(process.env.PORT || 8800, () => {
