@@ -9,14 +9,27 @@
         padding: 10px;
 
         .comments {
-            width: 80%;
+            width: 90%;
             margin: 0 auto;
 
             li {
                 margin-bottom: 10px;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-end;
+
+                .postComment {
+                    width: 80%;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .postCommentTime {
+                    color: #777;
+                    font-size: 0.8em;
+                }
+
             }
 
         }

@@ -4,9 +4,11 @@ import { PermMedia, Label, Room, EmojiEmotions } from "@material-ui/icons";
 import { post, upload } from "../../api/action";
 import { connect } from "react-redux";
 import PhotoPreview from "../photopreview";
+import Emoji from "../emoji";
 function Share({ userInfo }) {
     const [file, setFile] = useState(null);
     const [fileD, setFileD] = useState(null);
+    const [emojiOpen, SetEmojiOpen] = useState(false);
     const postContent = useRef();
     const postFeed = async (e) => {
         e.preventDefault();
@@ -36,6 +38,10 @@ function Share({ userInfo }) {
                 console.log(error);
             }
         }
+    };
+    const addEmoji = (emoji) => {
+        postContent.current.value += emoji.native;
+        postContent.current.focus();
     };
     const previewFile = (file, callback) => {
         const reader = new FileReader();
@@ -115,9 +121,19 @@ function Share({ userInfo }) {
                             <EmojiEmotions
                                 htmlColor="goldenrod"
                                 className="shareOptionIcon"
+                                onClick={() => SetEmojiOpen(!emojiOpen)}
                             />
-                            <span className="shareOptionText">Feelings</span>
+                            <span
+                                className="shareOptionText"
+                                onClick={() => SetEmojiOpen(!emojiOpen)}
+                            >
+                                Feelings
+                            </span>
+                            {emojiOpen ? (
+                                <Emoji onSelect={addEmoji} topH="25px" />
+                            ) : null}
                         </div>
+
                         <button className="shareButton">Share</button>
                     </div>
                 </form>

@@ -13,12 +13,14 @@ function Post({ post, userInfo, id, deletePost: dp }) {
     const { username, avatar, _id: userId } = userInfo;
     const [showMenu, setShowMenu] = useState(false);
     const muneRef = useRef();
-    const { description, comments, image, _id, createdAt } = post;
+    const { description, comments: commentsP, image, _id, createdAt } = post;
+    const [comments, setComments] = useState([]);
     const [like, setLike] = useState(post.likes ? post.likes.length : 0);
     const [hasLiked, sethasLiked] = useState(
         post.likes ? (post.likes.indexOf(id) !== -1 ? true : false) : false
     );
     useEffect(() => {
+        setComments(commentsP || []);
         document.addEventListener("click", () => {
             setShowMenu(false);
         });
@@ -115,12 +117,23 @@ function Post({ post, userInfo, id, deletePost: dp }) {
                 <ul className="comments">
                     {comments
                         ? comments.map((comment) => (
-                              <li key={comment._id}>{comment.description}</li>
+                              <li key={comment._id}>
+                                  <span className="postComment">
+                                      {comment.description}
+                                  </span>
+                                  <span className="postCommentTime">
+                                      {postTime(comment.createdAt)}
+                                  </span>
+                              </li>
                           ))
                         : 0}
                 </ul>
                 <hr className="shareHr" />
-                <Postnewcommpoents />
+                <Postnewcommpoents
+                    postId={_id}
+                    selfId={id}
+                    setComments={setComments}
+                />
             </div>
         </div>
     );
