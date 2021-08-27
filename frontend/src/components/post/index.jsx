@@ -21,9 +21,13 @@ function Post({ post, userInfo, id, deletePost: dp }) {
     );
     useEffect(() => {
         setComments(commentsP || []);
-        document.addEventListener("click", () => {
+        const eventR = () => {
             setShowMenu(false);
-        });
+        };
+        document.addEventListener("click", eventR);
+        return () => {
+            document.removeEventListener("click", eventR);
+        };
     }, []);
     const likeIt = async () => {
         if (!hasLiked) {
@@ -116,7 +120,7 @@ function Post({ post, userInfo, id, deletePost: dp }) {
                 </div>
                 <ul className="comments">
                     {comments
-                        ? comments.map((comment) => (
+                        ? comments.slice(0, 2).map((comment) => (
                               <li key={comment._id}>
                                   <span className="postComment">
                                       {comment.description}
@@ -127,6 +131,11 @@ function Post({ post, userInfo, id, deletePost: dp }) {
                               </li>
                           ))
                         : 0}
+                    {comments ? (
+                        comments.length > 2 ? (
+                            <span>Read all {comments.length} comments</span>
+                        ) : null
+                    ) : null}
                 </ul>
                 <hr className="shareHr" />
                 <Postnewcommpoents

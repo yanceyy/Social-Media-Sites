@@ -95,10 +95,12 @@ router.post("/logout", async (req, res) => {
 router.post("/refresh", async (req, res) => {
     const refreshToken = req.body.token
     if (! refreshToken) {
+        console.log("You are no authorizated1")
         return res.status(401).json("You are no authorizated")
     }
 
-    if (! reFreshTokens.includes(refreshToken, reFreshTokens)) {
+    if (! reFreshTokens.includes(refreshToken)) {
+        console.log("Refresh token is not valid")
         return res.status(401).json("Refresh token is not valid")
     }
     try {

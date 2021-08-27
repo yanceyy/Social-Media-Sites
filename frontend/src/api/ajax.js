@@ -14,7 +14,7 @@ const refreshTokenAction = async () => {
     } catch (err) {
         alert("can get refreshed token, please relog");
         localStorage.clear();
-        window.location.ref = "/login";
+        window.location.href = "/login";
     }
 };
 
