@@ -9,7 +9,7 @@ import LinkW from "../link";
 import { connect } from "react-redux";
 import { BASEIMAGEURL } from "../../utils/const";
 import Postnewcommpoents from "./postnewcommpoents";
-function Post({ post, userInfo, id, deletePost: dp }) {
+function Post({ post, userInfo, id, deletePost: dp, SetPostId }) {
     const { username, avatar, _id: userId } = userInfo;
     const [showMenu, setShowMenu] = useState(false);
     const muneRef = useRef();
@@ -113,7 +113,10 @@ function Post({ post, userInfo, id, deletePost: dp }) {
                         ) : null}
                     </div>
                     <div className="postBottomRight">
-                        <span className="postCommentText">
+                        <span
+                            className="postCommentText"
+                            onClick={() => SetPostId(_id)}
+                        >
                             {comments ? comments.length : 0} comments
                         </span>
                     </div>

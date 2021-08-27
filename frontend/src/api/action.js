@@ -43,6 +43,11 @@ export const deletePost = ({userId, postId}) => ajax(BASEURL + "/post/" + postId
 }, "DELETE");
 
 /*
+Get Post
+*/
+export const getPost = (postId) => ajax(BASEURL + "/post/" + postId);
+
+/*
 Post get all posts
 */
 export const getFeeds = (userId) => ajax(BASEURL + "/post/timeline/" + userId, {});
