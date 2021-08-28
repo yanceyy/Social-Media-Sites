@@ -5,7 +5,7 @@ import Post from "../post";
 import useExpandcard from "./expandcard";
 function Feed({ posts: p, userNameLists, iself }) {
     const [posts, setPosts] = useState([]);
-    const [Content, SetPostId] = useExpandcard();
+    const [Content, SetPostId] = useExpandcard(); // the feed component to maintain the component
     const deletePost = (postId) => {
         setPosts(posts.filter((post) => post._id !== postId));
     };

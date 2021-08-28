@@ -113,10 +113,7 @@ function Post({ post, userInfo, id, deletePost: dp, SetPostId }) {
                         ) : null}
                     </div>
                     <div className="postBottomRight">
-                        <span
-                            className="postCommentText"
-                            onClick={() => SetPostId(_id)}
-                        >
+                        <span className="postCommentText">
                             {comments ? comments.length : 0} comments
                         </span>
                     </div>
@@ -136,7 +133,12 @@ function Post({ post, userInfo, id, deletePost: dp, SetPostId }) {
                         : 0}
                     {comments ? (
                         comments.length > 2 ? (
-                            <span>Read all {comments.length} comments</span>
+                            <p
+                                onClick={() => SetPostId(_id)}
+                                className="postCommentReadMore"
+                            >
+                                Read all {comments.length} comments
+                            </p>
                         ) : null
                     ) : null}
                 </ul>

@@ -66,6 +66,14 @@ router.get('/:id', async (req, res) => {
     const {id} = req.params
     try {
         const post = await Post.findById(id)
+        if (post.comments) {
+            const comments = await Comment.find({
+                '_id': {
+                    $in: post.comments
+                }
+            });
+            post['comments'] = comments
+        }
         return res.status(RESPONSESTATUS.Success).json(post)
     } catch (err) {
         return res.status(RESPONSESTATUS.BadRequest).json({error: "Bad request"})
@@ -82,9 +90,12 @@ router.get('/timeline/:userId', async (req, res) => {
         for (let i = 0; i < userPosts.length; i++) {
             const post = userPosts[i]
             if (post.comments) {
-                const comments = post.comments.map(comment => Comment.findById(comment))
-                const res = await Promise.all(comments)
-                post['comments'] = res
+                const comments = await Comment.find({
+                    '_id': {
+                        $in: post.comments
+                    }
+                });
+                post['comments'] = comments
             }
         }
         return res.status(RESPONSESTATUS.Success).json(userPosts)

@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "@emotion/styled";
 import CancelIcon from "@material-ui/icons/Cancel";
 import Postnewcommpoents from "../post/postnewcommpoents";
 import { getPost } from "../../api/action";
 import { BASEIMAGEURL } from "../../utils/const";
+import {
+    disableBodyScroll,
+    enableBodyScroll,
+    clearAllBodyScrollLocks,
+} from "body-scroll-lock"; //show same behaver as the Instagram
 
 const Conatiner = styled.div`
     width: 100vw;
@@ -59,6 +64,21 @@ const CardName = styled.div`
 `;
 const CardComments = styled.div`
     flex: 1;
+    padding: 10px;
+
+    & > .commentstitle {
+        font-weight: bold;
+        margin: 5px 0;
+    }
+
+    & .name {
+        margin-right: 5px;
+    }
+    & .des {
+        margin-left: 5px;
+        word-wrap: break-word;
+        overflow-wrap: wrap;
+    }
 `;
 
 const CardCommentsBottom = styled.div`
@@ -82,25 +102,41 @@ const UserImg = styled.img`
 
 const UserName = styled.span``;
 function useExpandcard() {
-    const [postId, SetPostId] = useState(undefined);
+    const panel = useRef();
+    const [postId, SetPostId] = useState(undefined); //show when receive a id than undefined
     const [show, setShow] = useState(false);
-    const [postInfo, SetPostInfo] = useState({});
+    const [postInfo, SetPostInfo] = useState({}); //store post info
     useEffect(async () => {
         if (postId !== undefined) {
             const post = await getPost(postId);
-            console.log(BASEIMAGEURL + post.image);
-            SetPostInfo(post);
             setShow(true);
-            const hiddenPanel = () => setShow(false);
-            document.addEventListener("click", hiddenPanel);
-            return () => document.removeEventListener("click", hiddenPanel);
+            SetPostInfo(post);
+            disableBodyScroll(window);
+            SetPostId(undefined);
+            //when click on the back then the pop up panel has been hiddened
+            const hiddenPanel = (e) => {
+                if (e.target === panel.current) {
+                    enableBodyScroll(window);
+                    setShow(false);
+                }
+            };
+            panel.current.addEventListener("click", hiddenPanel);
+            return () => {
+                clearAllBodyScrollLocks();
+                panel.current.removeEventListener("click", hiddenPanel);
+            };
         }
     }, [postId]);
 
     const content = function () {
         return show ? (
-            <Conatiner>
-                <CloseButton onClick={() => setShow(false)}>
+            <Conatiner ref={panel}>
+                <CloseButton
+                    onClick={() => {
+                        enableBodyScroll(window);
+                        setShow(false);
+                    }}
+                >
                     <CancelIcon />
                 </CloseButton>
                 <Card>
@@ -116,7 +152,25 @@ function useExpandcard() {
                             <UserImg src={"/utils/unkown.png"} alt="" />
                             <UserName>{postInfo.userId}</UserName>
                         </CardName>
-                        <CardComments>{postInfo.description}</CardComments>
+                        <CardComments>
+                            {postInfo.description}
+                            <p className="commentstitle">Comments:</p>
+                            <ul className="list">
+                                {postInfo.comments
+                                    ? postInfo.comments.map((comment) => (
+                                          <li key={comment._id}>
+                                              <span className="name">
+                                                  {comment.userId}
+                                              </span>
+                                              :
+                                              <span className="des">
+                                                  {comment.description}
+                                              </span>
+                                          </li>
+                                      ))
+                                    : "no comments"}
+                            </ul>
+                        </CardComments>
                         <CardCommentsBottom>
                             <CardCommentsOperation></CardCommentsOperation>
                             <Postnewcommpoents></Postnewcommpoents>
