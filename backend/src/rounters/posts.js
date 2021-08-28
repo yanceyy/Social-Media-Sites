@@ -35,6 +35,14 @@ router.delete('/:id', ValidaToken, async (req, res) => {
     const post = await Post.findById(id)
     if (post.userId === userId) {
         await post.deleteOne()
+        if (post.comments) {
+            await Comment.remove({ // remove all comments related to the post
+                '_id': {
+                    $in: post.comments
+                }
+            });
+        }
+
         return res.status(RESPONSESTATUS.Success).json("Your post has been deleted")
     } else {
         return res.status(RESPONSESTATUS.BadRequest).json({error: "You cann't edit others' posts"})
