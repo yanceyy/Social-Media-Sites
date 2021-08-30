@@ -5,9 +5,11 @@ import { post, upload } from "../../api/action";
 import { connect } from "react-redux";
 import PhotoPreview from "../photopreview";
 import Emoji from "../emoji";
+import Compressor from "compressorjs"; // compress the image before uploading
 function Share({ userInfo }) {
     const [file, setFile] = useState(null);
     const [fileD, setFileD] = useState(null);
+    const [isUploading, SetIsUploading] = useState(false);
     const [emojiOpen, SetEmojiOpen] = useState(false);
     const postContent = useRef();
     const postFeed = async (e) => {
@@ -16,27 +18,33 @@ function Share({ userInfo }) {
             userId: userInfo._id,
             description: postContent.current.value,
         };
-
+        SetIsUploading(true);
         if (file) {
-            const data = new FormData();
-            data.append("file", file);
-            data.append("name", file.name);
+            new Compressor(file, {
+                quality: 0.3,
+                async success(compressedPicture) {
+                    const data = new FormData();
+                    data.append("file", compressedPicture);
+                    data.append("name", compressedPicture.name);
 
-            try {
-                const filename = await upload(data);
-                newPost.image = filename.filePath;
-            } catch (error) {
-                console.log(error);
-            }
-        }
+                    try {
+                        const filename = await upload(data);
+                        newPost.image = filename.filePath;
+                    } catch (error) {
+                        console.log(error);
+                    }
 
-        if (postContent.current.value.trim().length !== 0) {
-            try {
-                await post(newPost);
-                window.location.reload();
-            } catch (error) {
-                console.log(error);
-            }
+                    if (postContent.current.value.trim().length !== 0) {
+                        try {
+                            await post(newPost);
+                            window.location.reload();
+                        } catch (error) {
+                            console.log(error);
+                        }
+                    }
+                    SetIsUploading(false);
+                },
+            });
         }
     };
     const addEmoji = (emoji) => {
@@ -134,7 +142,9 @@ function Share({ userInfo }) {
                             ) : null}
                         </div>
 
-                        <button className="shareButton">Share</button>
+                        <button className="shareButton" disabled={isUploading}>
+                            {isUploading ? "Uploading" : "Share"}
+                        </button>
                     </div>
                 </form>
             </div>

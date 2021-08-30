@@ -90,6 +90,7 @@ function Post({ post, userInfo, id, deletePost: dp, SetPostId }) {
                     ) : null}
                     {image ? (
                         <img
+                            onClick={() => SetPostId(_id)}
                             loading="lazy"
                             src={BASEIMAGEURL + image}
                             alt=""
