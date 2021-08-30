@@ -27,7 +27,7 @@ const CommonentEmojiInsert = styled(InsertEmoticonIcon)`
     margin-right: 10px;
     cursor: pointer;
 `;
-function Postnewcommpoents({ postId, selfId, setComments }) {
+function Postnewcommpoents({ postId, selfId, setComments, selfName }) {
     // must start with capital letter
     const [comment, setComment] = useState("");
     const [emojiOpen, SetEmojiOpen] = useState(false);
@@ -39,7 +39,7 @@ function Postnewcommpoents({ postId, selfId, setComments }) {
                     description: comment,
                 });
                 setComments((preComments) => {
-                    console.log(preComments);
+                    res.username = selfName;
                     return [...preComments, res];
                 });
                 console.log(res);

@@ -73,7 +73,10 @@ router.put('/like/:id', ValidaToken, async (req, res) => {
 router.get('/:id', async (req, res) => {
     const {id} = req.params
     try {
-        const post = await Post.findById(id)
+        const post = await Post.findById(id).lean();
+        const user = await User.findById(post.userId)
+        console.log(user.username)
+
         if (post.comments) {
             const comments = await Comment.find({
                 '_id': {
@@ -87,6 +90,7 @@ router.get('/:id', async (req, res) => {
             };
             post['comments'] = comments
         }
+        post.username = user.username
         return res.status(RESPONSESTATUS.Success).json(post)
     } catch (err) {
         return res.status(RESPONSESTATUS.BadRequest).json({error: "Bad request"})

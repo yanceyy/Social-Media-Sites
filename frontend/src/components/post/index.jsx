@@ -9,7 +9,7 @@ import LinkW from "../link";
 import { connect } from "react-redux";
 import { BASEIMAGEURL } from "../../utils/const";
 import Postnewcommpoents from "./postnewcommpoents";
-function Post({ post, userInfo, id, deletePost: dp, SetPostId }) {
+function Post({ post, userInfo, id, deletePost: dp, SetPostId, selfName }) {
     const { username, avatar, _id: userId } = userInfo;
     const [showMenu, setShowMenu] = useState(false);
     const muneRef = useRef();
@@ -147,6 +147,7 @@ function Post({ post, userInfo, id, deletePost: dp, SetPostId }) {
                 <Postnewcommpoents
                     postId={_id}
                     selfId={id}
+                    selfName={selfName}
                     setComments={setComments}
                 />
             </div>
@@ -158,4 +159,7 @@ Post.propTypes = {
     post: PropTypes.object.isRequired,
 };
 
-export default connect((state) => ({ id: state.userInfo._id }))(Post);
+export default connect((state) => ({
+    id: state.userInfo._id,
+    selfName: state.userInfo.username,
+}))(Post);

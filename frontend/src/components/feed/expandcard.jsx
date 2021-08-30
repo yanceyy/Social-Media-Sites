@@ -106,26 +106,29 @@ function useExpandcard() {
     const [postId, SetPostId] = useState(undefined); //show when receive a id than undefined
     const [show, setShow] = useState(false);
     const [postInfo, SetPostInfo] = useState({}); //store post info
-    useEffect(async () => {
-        if (postId !== undefined) {
-            const post = await getPost(postId);
-            setShow(true);
-            SetPostInfo(post);
-            disableBodyScroll(window);
-            SetPostId(undefined);
-            //when click on the back then the pop up panel has been hiddened
-            const hiddenPanel = (e) => {
-                if (e.target === panel.current) {
-                    enableBodyScroll(window);
-                    setShow(false);
-                }
-            };
-            panel.current.addEventListener("click", hiddenPanel);
-            return () => {
-                clearAllBodyScrollLocks();
-                panel.current.removeEventListener("click", hiddenPanel);
-            };
-        }
+    useEffect(() => {
+        (async () => {
+            if (postId !== undefined) {
+                const post = await getPost(postId);
+                console.log(post);
+                setShow(true);
+                SetPostInfo(post);
+                disableBodyScroll(window);
+                SetPostId(undefined);
+                //when click on the back then the pop up panel has been hiddened
+                const hiddenPanel = (e) => {
+                    if (e.target === panel.current) {
+                        enableBodyScroll(window);
+                        setShow(false);
+                    }
+                };
+                panel.current.addEventListener("click", hiddenPanel);
+                return () => {
+                    clearAllBodyScrollLocks();
+                    panel.current.removeEventListener("click", hiddenPanel);
+                };
+            }
+        })();
     }, [postId]);
 
     const content = function () {
@@ -150,7 +153,7 @@ function useExpandcard() {
                     <CommentCard>
                         <CardName>
                             <UserImg src={"/utils/unkown.png"} alt="" />
-                            <UserName>{postInfo.userId}</UserName>
+                            <UserName>{postInfo.username}</UserName>
                         </CardName>
                         <CardComments>
                             {postInfo.description}
@@ -183,4 +186,4 @@ function useExpandcard() {
     return [content, SetPostId];
 }
 
-export default useExpandcard;
+export default useExpandcard; // not use memo since to get updated data every time open
