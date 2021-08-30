@@ -79,7 +79,12 @@ router.get('/:id', async (req, res) => {
                 '_id': {
                     $in: post.comments
                 }
-            });
+            }).lean();
+            for (let comment of comments) { // find username
+                const user = await User.findById(comment.userId)
+                comment.username = user.username
+
+            };
             post['comments'] = comments
         }
         return res.status(RESPONSESTATUS.Success).json(post)
@@ -102,7 +107,12 @@ router.get('/timeline/:userId', async (req, res) => {
                     '_id': {
                         $in: post.comments
                     }
-                });
+                }).lean();
+                for (let comment of comments) { // find username
+                    const user = await User.findById(comment.userId)
+                    comment.username = user.username
+
+                }
                 post['comments'] = comments
             }
         }

@@ -160,7 +160,7 @@ function useExpandcard() {
                                     ? postInfo.comments.map((comment) => (
                                           <li key={comment._id}>
                                               <span className="name">
-                                                  {comment.userId}
+                                                  {comment.username}
                                               </span>
                                               :
                                               <span className="des">

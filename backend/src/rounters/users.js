@@ -52,7 +52,6 @@ router.get("/", async (req, res) => {
             __v,
             ...other
         } = user._doc
-        console.dir(user)
         return res.status(RESPONSESTATUS.Success).json(other)
     } catch (err) {
         return res.status(403).json({error: "illeage request"})

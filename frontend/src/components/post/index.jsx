@@ -124,7 +124,7 @@ function Post({ post, userInfo, id, deletePost: dp, SetPostId }) {
                         ? comments.slice(0, 2).map((comment) => (
                               <li key={comment._id}>
                                   <span className="postComment">
-                                      {comment.description}
+                                      {comment.username} : {comment.description}
                                   </span>
                                   <span className="postCommentTime">
                                       {postTime(comment.createdAt)}
