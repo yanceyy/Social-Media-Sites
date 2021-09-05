@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { postComment } from "../../api/action";
 import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
 import Emoji from "../emoji";
+import { connect } from "react-redux";
 const Commenent = styled.div`
     display: flex;
     justify-content: space-between;
@@ -32,6 +33,10 @@ function Postnewcommpoents({ postId, selfId, setComments, selfName }) {
     const [comment, setComment] = useState("");
     const [emojiOpen, SetEmojiOpen] = useState(false);
     const toPostComment = async () => {
+        console.log(postId, {
+            userId: selfId,
+            description: comment,
+        });
         if (comment.trim().length > 0) {
             try {
                 const res = await postComment(postId, {
@@ -69,4 +74,7 @@ function Postnewcommpoents({ postId, selfId, setComments, selfName }) {
     );
 }
 
-export default Postnewcommpoents;
+export default connect((state) => ({
+    selfId: state.userInfo._id,
+    selfName: state.userInfo.username,
+}))(Postnewcommpoents);

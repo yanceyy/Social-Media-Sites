@@ -9,7 +9,7 @@ import LinkW from "../link";
 import { connect } from "react-redux";
 import { BASEIMAGEURL } from "../../utils/const";
 import Postnewcommpoents from "./postnewcommpoents";
-function Post({ post, userInfo, id, deletePost: dp, SetPostId, selfName }) {
+function Post({ post, userInfo, id, deletePost: dp, SetPostId }) {
     const { username, avatar, _id: userId } = userInfo;
     const [showMenu, setShowMenu] = useState(false);
     const muneRef = useRef();
@@ -144,12 +144,7 @@ function Post({ post, userInfo, id, deletePost: dp, SetPostId, selfName }) {
                     ) : null}
                 </ul>
                 <hr className="shareHr" />
-                <Postnewcommpoents
-                    postId={_id}
-                    selfId={id}
-                    selfName={selfName}
-                    setComments={setComments}
-                />
+                <Postnewcommpoents postId={_id} setComments={setComments} />
             </div>
         </div>
     );

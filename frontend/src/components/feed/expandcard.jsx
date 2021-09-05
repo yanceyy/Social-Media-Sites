@@ -63,7 +63,7 @@ const CardName = styled.div`
     align-items: center;
 `;
 const CardComments = styled.div`
-    flex: 1;
+    height: 380px;
     padding: 10px;
 
     & > .commentstitle {
@@ -99,32 +99,40 @@ const UserImg = styled.img`
     border: red 2px solid;
     border-radius: 50%;
 `;
+const CommentsList = styled.ul`
+    overflow-y: auto;
+    height: 80%;
+`;
 
 const UserName = styled.span``;
 function useExpandcard() {
     const panel = useRef();
     const [postId, SetPostId] = useState(undefined); //show when receive a id than undefined
     const [show, setShow] = useState(false);
-    const [postInfo, SetPostInfo] = useState({}); //store post info
+    const [postInfo, setPostInfo] = useState({}); //store post info
+    const [comments, setComments] = useState(null);
     useEffect(() => {
         (async () => {
+            console.log("useefef");
             if (postId !== undefined) {
                 const post = await getPost(postId);
-                console.log(post);
                 setShow(true);
-                SetPostInfo(post);
+                setPostInfo(post);
                 disableBodyScroll(window);
-                SetPostId(undefined);
+                setComments(post.comments);
                 //when click on the back then the pop up panel has been hiddened
                 const hiddenPanel = (e) => {
+                    console.log(e);
                     if (e.target === panel.current) {
                         enableBodyScroll(window);
                         setShow(false);
+                        SetPostId(undefined);
                     }
                 };
                 panel.current.addEventListener("click", hiddenPanel);
                 return () => {
                     clearAllBodyScrollLocks();
+                    console.log("useefef1");
                     panel.current.removeEventListener("click", hiddenPanel);
                 };
             }
@@ -158,9 +166,9 @@ function useExpandcard() {
                         <CardComments>
                             {postInfo.description}
                             <p className="commentstitle">Comments:</p>
-                            <ul className="list">
-                                {postInfo.comments
-                                    ? postInfo.comments.map((comment) => (
+                            <CommentsList>
+                                {comments
+                                    ? comments.map((comment) => (
                                           <li key={comment._id}>
                                               <span className="name">
                                                   {comment.username}
@@ -172,11 +180,14 @@ function useExpandcard() {
                                           </li>
                                       ))
                                     : "no comments"}
-                            </ul>
+                            </CommentsList>
                         </CardComments>
                         <CardCommentsBottom>
                             <CardCommentsOperation></CardCommentsOperation>
-                            <Postnewcommpoents></Postnewcommpoents>
+                            <Postnewcommpoents
+                                postId={postId}
+                                setComments={setComments}
+                            ></Postnewcommpoents>
                         </CardCommentsBottom>
                     </CommentCard>
                 </Card>
